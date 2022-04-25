@@ -1,8 +1,8 @@
-import os
 import pickle
 import socket
 import sys
 import threading as tr
+
 from Network import PacketTypes as pt
 from Network import NetworkConstants as const
 
@@ -48,6 +48,7 @@ class NetworkServer:
         buffer_enc_length += b' ' * (
                     const.HEADER - len(buffer_enc_length))  # fill up buffer, until it has the expected size
 
+
         client.send(buffer_enc_length)
         client.send(action_enc)
         if hasattr(action, "data_length"):
@@ -58,7 +59,7 @@ class NetworkServer:
         for client in self.clients:
             self.sendAction(client, action)
 
-    def control_acceleration(self, speed):
-        action = pt.Acceleration(speed=speed)
+    def control_acceleration(self, speed, time):
+        action = pt.Acceleration(speed=speed, time=time)
         for client in self.clients:
             self.sendAction(client, action)

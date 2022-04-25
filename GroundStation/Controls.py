@@ -14,11 +14,12 @@ class Control:
             elif self.angle > 0:
                 self.angle -= const.STEERING_SPEED
         elif left:
-            if self.angle - const.STEERING_SPEED > -car_const.SERVO_MAX_ANGLE:
-                self.angle -= const.STEERING_SPEED
-        elif right:
             if self.angle + const.STEERING_SPEED < car_const.SERVO_MAX_ANGLE:
                 self.angle += const.STEERING_SPEED
+        elif right:
+            if self.angle - const.STEERING_SPEED > -car_const.SERVO_MAX_ANGLE:
+                self.angle -= const.STEERING_SPEED
+
 
     def accelerate(self, accelerator, brake):
         if brake:

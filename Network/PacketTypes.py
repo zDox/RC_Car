@@ -9,6 +9,7 @@ class Steering:
 @dataclass
 class Acceleration:
     speed: int
+    time: float
 
 
 @dataclass

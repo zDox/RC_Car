@@ -2,8 +2,8 @@ import socket
 import pickle
 from time import sleep
 
-import PacketTypes as pt
-import NetworkConstants as const
+from Network import PacketTypes as pt
+from Network import NetworkConstants as const
 
 
 class Network:
@@ -40,6 +40,7 @@ class Network:
         buffer_length = self.client.recv(const.HEADER).decode(const.FORMAT)
         if not buffer_length:
             self.connected = False
+            quit()
             self.connect_to_server()
             self.handle_answer()
         if buffer_length:

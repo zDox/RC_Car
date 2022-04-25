@@ -1,4 +1,6 @@
 # import pygame module in this program
+from time import time
+
 import pygame
 import threading as tr
 
@@ -38,7 +40,6 @@ class GroundStation:
         # infinite loop
         font = pygame.font.Font(None, 32)
 
-
         while True:
             self.clock.tick(const.FPS)
 
@@ -53,7 +54,6 @@ class GroundStation:
             self.display_surface.blit(text, textRect)
 
             for event in pygame.event.get():
-
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
@@ -61,12 +61,11 @@ class GroundStation:
                     quit()
 
             state = pygame.key.get_pressed()
+            time1 = time()
             control.turn(state[pygame.K_a], state[pygame.K_d])
             control.accelerate(state[pygame.K_w], state[pygame.K_s])
             self.nc.control_steering(control.angle)
-            self.nc.control_acceleration(control.speed)
-
-
+            self.nc.control_acceleration(control.speed, time1)
 
             # Draws the surface object to the screen.
             pygame.display.update()
