@@ -1,16 +1,14 @@
+import pygame
 from time import sleep
+pygame.init()
+pygame.joystick.init()
 
-class test:
-    def __init__(self):
-        print("init")
+joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+logitech = pygame.joystick.Joystick(0)
+logitech.init()
+last_values = []
+while True:
+    for axis_id in range(logitech.get_numaxes()):
+        print(logitech.get_axis(axis_id), end="")
+    print("")
 
-    def __enter__(self):
-        print("test")
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        print("exit")
-
-
-if __name__ == '__main__':
-    with test() as test2:
-        sleep(1)

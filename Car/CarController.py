@@ -20,7 +20,7 @@ from Network import PacketTypes as pt
 from Car import NetworkController
 
 
-class Car:
+class CarControllerClass():
     def __init__(self):
         self.svc = ServoController.Servo()
         self.mtc = MotorController.Motor()
@@ -44,5 +44,5 @@ class Car:
 
 
 if __name__ == '__main__':
-    with Car() as car:
+    with CarControllerClass() as car:
         car.receive_controls()

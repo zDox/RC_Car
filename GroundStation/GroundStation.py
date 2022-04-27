@@ -5,22 +5,21 @@ import pygame
 import threading as tr
 
 import constants as const
+import TelemetryController
 from Controls import Control
 from NetworkServer import NetworkServer
+from colors import *
 
 # activate the pygame library
 # initiate pygame and give permission
 # to use pygame's functionality.
 pygame.init()
 
+joystick = pygame.joystick.Joystick(0)
+joystick.init()
+
 control = Control()
-
-white = (255, 255, 255)
-green = (0, 255, 0)
-blue = (0, 0, 128)
-
-X = 400
-Y = 400
+telemetry = TelemetryController.Telemetry(joystick)
 
 
 class GroundStation:
@@ -30,34 +29,22 @@ class GroundStation:
         thread = tr.Thread(target=self.nc.start, daemon=True)
         thread.start()
 
-        self.display_surface = pygame.display.set_mode((X, Y))
-        pygame.display.set_caption('Show Text')
+        self.display_surface = pygame.display.set_mode((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+        pygame.display.set_caption('RC Car Control')
 
         self.clock = pygame.time.Clock()
         self.update()
 
     def update(self):
         # infinite loop
-        font = pygame.font.Font(None, 32)
 
         while True:
             self.clock.tick(const.FPS)
-
-            self.display_surface.fill(white)
-
-            text = font.render(f"{control.angle}", True, green, blue)
-
-            textRect = text.get_rect()
-
-            textRect.center = (X // 2, Y // 2)
-
-            self.display_surface.blit(text, textRect)
+            self.display_surface.fill(WHITE)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-
-                    # quit the program.
                     quit()
 
             state = pygame.key.get_pressed()
@@ -66,6 +53,8 @@ class GroundStation:
             control.accelerate(state[pygame.K_w], state[pygame.K_s])
             self.nc.control_steering(control.angle)
             self.nc.control_acceleration(control.speed, time1)
+
+            telemetry.update(self.display_surface)
 
             # Draws the surface object to the screen.
             pygame.display.update()

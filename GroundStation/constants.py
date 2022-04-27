@@ -1,5 +1,22 @@
+from colors import *
+# Pygame Settings
 FPS = 60
+SCREEN_WIDTH = 1800
+SCREEN_HEIGHT = 1000
 
+# Car Control Settings
 STEERING_SPEED = 30
 BRAKE_FORCE = 15
 ACCELERATION_FORCE = 5
+
+BRAKE_PEDAL_AXIS = 3
+THROTTLE_PEDAL_AXIS = 4
+
+# Visual Settings
+DEFAULT_IMAGE_SIZE = (100, 100)
+WHEEL_OFFSET = 20
+BAR_OFFSET = 10
+BAR_WIDTH = 20
+BAR_HEIGHT_PERCENTAGE = 20
+BARS = [(3, "Brake", RED),
+        (2, "Throttle", GREEN)]
