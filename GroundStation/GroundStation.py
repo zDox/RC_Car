@@ -7,6 +7,7 @@ import threading as tr
 import constants as const
 import TelemetryController
 from Controls import Control
+import VideoController
 from NetworkServer import NetworkServer
 from colors import *
 
@@ -26,8 +27,12 @@ class GroundStation:
     def __init__(self):
 
         self.nc = NetworkServer()
-        thread = tr.Thread(target=self.nc.start, daemon=True)
-        thread.start()
+        network_thread = tr.Thread(target=self.nc.start, daemon=True)
+        network_thread.start()
+
+        self.vc = VideoController.Video()
+        video_thread = tr.Thread(target=self.vc.receiv_data, daemon=True)
+        video_thread.start()
 
         self.display_surface = pygame.display.set_mode((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         pygame.display.set_caption('RC Car Control')

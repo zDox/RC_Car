@@ -8,7 +8,7 @@ options = {"flag": 0, "copy": False, "track": False}
 # Define Netgear Client at given IP address and define parameters
 # !!! change following IP address '192.168.x.xxx' with yours !!!
 client = NetGear(
-    address="192.168.30.15",
+    address="192.168.30.30",
     port="5454",
     protocol="tcp",
     pattern=0,

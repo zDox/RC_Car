@@ -1,5 +1,6 @@
 import os
 import sys
+import threading as tr
 
 import constants as const
 
@@ -17,7 +18,7 @@ parent = os.path.dirname(current)
 sys.path.append(parent)
 
 from Network import PacketTypes as pt
-from Car import NetworkController
+import NetworkController, CameraController
 
 
 class CarControllerClass():
@@ -26,6 +27,10 @@ class CarControllerClass():
         self.mtc = MotorController.Motor()
         self.nc = NetworkController.Network()
         self.nc.connect_to_server()
+        self.cc = CameraController.Cam()
+
+        camera_thread = tr.Thread(target=self.cc.send_data, daemon=True)
+        camera_thread.start()
 
     def __enter__(self):
         print("Controller started")
