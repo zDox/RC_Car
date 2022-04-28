@@ -1,5 +1,5 @@
 # import required libraries
-from vidgear.gears import NetGear
+from vidgear.gears import NetGear, CamGear
 import cv2
 
 from Network import NetworkConstants as const
@@ -8,12 +8,17 @@ from Network import NetworkConstants as const
 class Cam:
     def __init__(self):
         # Open suitable video stream, such as webcam on first index(i.e. 0)
-        self.stream = cv2.VideoCapture(0)
-        self.stream.set(3, 1920)
-        self.stream.set(4, 1080)
-        self.stream.set(6, cv2.VideoWriter.fourcc("M", "J", "P", "G"))
+        cam_options = {
+            "CAP_PROP_FRAME_WIDTH": 640,  # resolution 320x240
+            "CAP_PROP_FRAME_HEIGHT": 360,
+            "CAP_PROP_FPS": 30,  # framerate 60fps
+        }
+        self.stream = CamGear(source=0, **cam_options).start()
         # define tweak flags
-        options = {"flag": 0, "copy": False, "track": False}
+        options = {"flag": 0,
+                   "copy": False,
+                   "track": False,
+                   }
         self.server = NetGear(
             address=const.SERVER_IP,
             port=const.VIDEO_PORT,
@@ -26,9 +31,9 @@ class Cam:
     def send_data(self):
         while True:
             # read frames from stream
-            (grabbed, frame) = self.stream.read()
+            frame = self.stream.read()
             # check for frame if not grabbed
-            if not grabbed:
+            if frame is None:
                 break
             # send frame to server
             self.server.send(frame)

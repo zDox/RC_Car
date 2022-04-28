@@ -8,7 +8,10 @@ from Network import NetworkConstants as const
 class Video:
     def __init__(self):
         self.frame = None
-        options = {"flag": 0, "copy": False, "track": False}
+        options = {"flag": 0,
+                   "copy": False,
+                   "track": False,
+        }
         self.client = NetGear(
             address=const.SERVER_IP,
             port=const.VIDEO_PORT,
