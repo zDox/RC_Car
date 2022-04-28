@@ -1,8 +1,8 @@
 from colors import *
 # Pygame Settings
 FPS = 60
-SCREEN_WIDTH = 1800
-SCREEN_HEIGHT = 1000
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 
 # Car Control Settings
 STEERING_SPEED = 30

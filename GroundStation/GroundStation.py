@@ -31,7 +31,7 @@ class GroundStation:
         network_thread.start()
 
         self.vc = VideoController.Video()
-        video_thread = tr.Thread(target=self.vc.receive_data, daemon=True)
+        video_thread = tr.Thread(target=self.vc.video, daemon=True)
         video_thread.start()
 
         self.display_surface = pygame.display.set_mode((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
@@ -63,10 +63,12 @@ class GroundStation:
             if speed_changed:
                 self.nc.control_acceleration(control.speed, time1)
 
-            telemetry.update(self.display_surface)
             if self.vc.frame is not None:
                 self.display_surface.blit(self.vc.get_current_frame(), (0, 0))
             # Draws the surface object to the screen.
+
+            telemetry.update(self.display_surface)
+
             pygame.display.update()
 
 

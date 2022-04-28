@@ -1,5 +1,8 @@
 # import required libraries
-from vidgear.gears import NetGear, CamGear
+import asyncio
+
+from vidgear.gears import CamGear
+from vidgear.gears.asyncio import NetGear_Async
 import cv2
 
 from Network import NetworkConstants as const
@@ -18,26 +21,35 @@ class Cam:
         options = {"flag": 0,
                    "copy": False,
                    "track": False,
+                   "jpeg_compression": True,
+                   "jpeg_compression_quality": 70,
+                   "jpeg_compression_fastdct": True,
+                   "jpeg_compression_fastupsample": True,
                    }
-        self.server = NetGear(
+        self.server = NetGear_Async(
             address=const.SERVER_IP,
             port=const.VIDEO_PORT,
             protocol="tcp",
-            pattern=0,
             logging=False,
             **options
         )
 
-    def send_data(self):
-        while True:
-            # read frames from stream
-            frame = self.stream.read()
-            # check for frame if not grabbed
-            if frame is None:
-                break
-            # send frame to server
-            self.server.send(frame)
+    def cam(self):
+        asyncio.set_event_loop(self.server.loop)
+        # Add your custom source generator to Server configuration
+        self.server.config["generator"] = self.my_frame_generator()
+        # Launch the Server
+        self.server.launch()
+        try:
+            self.server.loop.run_until_complete(self.server.task)
+        except SystemExit:
+            pass
+        finally:
+            self.stream.release()
+            self.server.close()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.stream.release()
-        self.server.close()
+    async def my_frame_generator(self):
+        while True:
+            frame = self.stream.read()
+            yield frame
+            await asyncio.sleep(0)
