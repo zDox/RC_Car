@@ -8,6 +8,7 @@ class Control:
         self.speed = 1500
 
     def turn(self, left, right):
+        before = self.angle
         if (left and right) or (not left and not right):
             if self.angle < 0:
                 self.angle += const.STEERING_SPEED
@@ -19,12 +20,14 @@ class Control:
         elif right:
             if self.angle - const.STEERING_SPEED > -car_const.SERVO_MAX_ANGLE:
                 self.angle -= const.STEERING_SPEED
-
+        return before != self.angle
 
     def accelerate(self, accelerator, brake):
+        before = self.speed
         if brake:
             if self.speed - const.BRAKE_FORCE > car_const.ESC_MIN_VALUE:
                 self.speed -= const.BRAKE_FORCE
         elif accelerator:
             if self.speed + const.ACCELERATION_FORCE < car_const.ESC_MAX_VALUE:
                 self.speed += const.ACCELERATION_FORCE
+        return before != self.speed

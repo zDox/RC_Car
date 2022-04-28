@@ -43,7 +43,6 @@ class NetworkServer:
     def sendAction(self, client, action, data=None):
         action_enc = pickle.dumps(action)
         buffer_length = len(action_enc)
-
         buffer_enc_length = str(buffer_length).encode(const.FORMAT)
         buffer_enc_length += b' ' * (
                     const.HEADER - len(buffer_enc_length))  # fill up buffer, until it has the expected size

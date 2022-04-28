@@ -9,7 +9,9 @@ class Cam:
     def __init__(self):
         # Open suitable video stream, such as webcam on first index(i.e. 0)
         self.stream = cv2.VideoCapture(0)
-
+        self.stream.set(3, 1920)
+        self.stream.set(4, 1080)
+        self.stream.set(6, cv2.VideoWriter.fourcc("M", "J", "P", "G"))
         # define tweak flags
         options = {"flag": 0, "copy": False, "track": False}
         self.server = NetGear(
@@ -25,13 +27,9 @@ class Cam:
         while True:
             # read frames from stream
             (grabbed, frame) = self.stream.read()
-
             # check for frame if not grabbed
             if not grabbed:
                 break
-
-            # {do something with the frame here}
-
             # send frame to server
             self.server.send(frame)
 
