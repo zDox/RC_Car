@@ -16,12 +16,16 @@ from colors import *
 # to use pygame's functionality.
 pygame.init()
 
-joystick = pygame.joystick.Joystick(0)
-joystick.init()
+for i in range(pygame.joystick.get_count()):
+    if str(pygame.joystick.Joystick(i).get_guid()) == const.JOYSTICK_UUID:
+        joystick = pygame.joystick.Joystick(i)
+        joystick.init()
+        break
+else:
+    quit()
 
 control = Control()
 telemetry = TelemetryController.Telemetry(joystick)
-
 
 class GroundStation:
     def __init__(self):
@@ -31,7 +35,7 @@ class GroundStation:
         network_thread.start()
 
         self.vc = VideoController.Video()
-        video_thread = tr.Thread(target=self.vc.video, daemon=True)
+        video_thread = tr.Thread(target=self.vc.receive_data, daemon=True)
         video_thread.start()
 
         self.display_surface = pygame.display.set_mode((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))

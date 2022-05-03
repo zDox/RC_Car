@@ -29,7 +29,7 @@ class CarControllerClass:
         self.nc.connect_to_server()
         self.cc = CameraController.Cam()
 
-        camera_thread = tr.Thread(target=self.cc.cam, daemon=True)
+        camera_thread = tr.Thread(target=self.cc.my_frame_generator, daemon=True)
         camera_thread.start()
 
     def __enter__(self):

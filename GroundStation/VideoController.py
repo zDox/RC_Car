@@ -1,11 +1,8 @@
-import asyncio
-
 import pygame
-from vidgear.gears.asyncio import NetGear_Async
+from vidgear.gears import NetGear
 import cv2
 
 from Network import NetworkConstants as const
-import constants as c_const
 
 
 class Video:
@@ -15,13 +12,13 @@ class Video:
                    "copy": False,
                    "track": False,
                    }
-        self.client = NetGear_Async(
+        self.client = NetGear(
             address=const.SERVER_IP,
             port=const.VIDEO_PORT,
             receive_mode=True,
-            logging=False,
+            logging=True,
             **options
-        ).launch()
+        )
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         cv2.destroyAllWindows()
@@ -31,19 +28,14 @@ class Video:
 
         # loop over
 
-    def video(self):
-        asyncio.set_event_loop(self.client.loop)
-        try:
-            self.client.loop.run_until_complete(self.receive_data())
-        except SystemExit:
-            pass
-
-    async def receive_data(self):
-        async for frame in self.client.recv_generator():
+    def receive_data(self):
+        while True:
+            frame = self.client.recv()
 
             self.frame = pygame.transform.scale(pygame.image.frombuffer(frame.tostring(), (frame.shape[1::-1]),
                                                                         "RGB"), (1776, 1000))
-            await asyncio.sleep(0)
+            if not frame:
+                break
 
     def get_current_frame(self):
         return self.frame
