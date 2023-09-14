@@ -14,7 +14,7 @@ class Cam:
             "CAP_PROP_FRAME_HEIGHT": 360,
             "CAP_PROP_FPS": 30,  # framerate 60fps
         }
-        self.stream = CamGear(source=0, **cam_options).start()
+        self.stream = CamGear(source=0, colorspace="COLOR_BGR2RGB", **cam_options).start()
         # define tweak flags
         options = {"flag": 0,
                    "copy": False,
@@ -28,6 +28,7 @@ class Cam:
             address=const.SERVER_IP,
             port=const.VIDEO_PORT,
             protocol="tcp",
+            pattern=0,
             logging=False,
             **options
         )

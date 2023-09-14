@@ -15,6 +15,7 @@ class Video:
         self.client = NetGear(
             address=const.SERVER_IP,
             port=const.VIDEO_PORT,
+            pattern=0,
             receive_mode=True,
             logging=True,
             **options
@@ -30,12 +31,10 @@ class Video:
 
     def receive_data(self):
         while True:
-            frame = self.client.recv()
-
-            self.frame = pygame.transform.scale(pygame.image.frombuffer(frame.tostring(), (frame.shape[1::-1]),
-                                                                        "RGB"), (1776, 1000))
-            if not frame:
+            self.frame = self.client.recv()
+            if self.frame.all():
                 break
 
     def get_current_frame(self):
-        return self.frame
+        return pygame.transform.scale(pygame.image.frombuffer(self.frame.tostring(), (self.frame.shape[1::-1]),
+                                                                        "RGB"), (1776, 1000))

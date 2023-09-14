@@ -45,8 +45,7 @@ class NetworkServer:
         buffer_length = len(action_enc)
         buffer_enc_length = str(buffer_length).encode(const.FORMAT)
         buffer_enc_length += b' ' * (
-                    const.HEADER - len(buffer_enc_length))  # fill up buffer, until it has the expected size
-
+                const.HEADER - len(buffer_enc_length))  # fill up buffer, until it has the expected size
 
         client.send(buffer_enc_length)
         client.send(action_enc)
@@ -58,7 +57,7 @@ class NetworkServer:
         for client in self.clients:
             self.sendAction(client, action)
 
-    def control_acceleration(self, speed, time):
-        action = pt.Acceleration(speed=speed, time=time)
+    def control_acceleration(self, speed):
+        action = pt.Acceleration(speed=speed)
         for client in self.clients:
             self.sendAction(client, action)

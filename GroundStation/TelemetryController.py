@@ -3,6 +3,7 @@ import constants as const
 from colors import *
 
 
+
 class Telemetry:
     def __init__(self, joystick: pygame.joystick.Joystick):
         self.joystick = joystick
@@ -23,7 +24,7 @@ class Telemetry:
         for bar in self.bars:
             value = (self.joystick.get_axis(bar.axis) * -1 + 1) / 2 * const.SCREEN_HEIGHT / 10
             bar.update(screen, value)
-        wheel_value = (self.joystick.get_axis(0) * -1)
+        wheel_value = (self.joystick.get_axis(const.WHEEL_AXIS) * -1)
         self.wheel.update(screen, wheel_value)
 
 
